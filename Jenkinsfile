@@ -7,14 +7,14 @@ pipeline {
           steps {
             sh '''mkdir app1
 echo "hello app1" > app1/index.html 
-docker run --name app1 -v /app1:/usr/share/nginx/html:ro -d nginx'''
+docker run --name app1 -p 8081:8080 -v /app1:/usr/share/nginx/html:ro -d nginx'''
           }
         }
         stage('App2') {
           steps {
             sh '''mkdir app2
 echo "hello app2" > app2/index.html 
-docker run --name app2 -v /app2:/usr/share/nginx/html:ro -d nginx'''
+docker run --name app2 -p 8082:8080 -v /app2:/usr/share/nginx/html:ro -d nginx'''
           }
         }
       }
