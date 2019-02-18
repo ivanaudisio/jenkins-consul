@@ -20,6 +20,12 @@ pipeline {
           }
         }
         stage('App2') {
+          agent {
+            docker {
+              image 'maven:3-jdk-7-slim'
+            }
+
+          }
           environment {
             APP_NAME = 'app2'
           }
