@@ -4,13 +4,17 @@ pipeline {
     stage('Create Apps') {
       parallel {
         stage('App1') {
+          environment {
+            APP_NAME = 'app1'
+          }
           steps {
-            sh '''mkdir app1
-echo "hello app1" > index.html 
-echo FROM nginx > Dockerfile
-echo COPY index.html /usr/share/nginx/html/index.html
-docker build -t app1 .
-docker run --name app1 -p 8081:80 -d app1'''
+            git 'https://github.com/stormpath/stormpath-spring-boot-war-example.git'
+            sh 'mvn install'
+            sh '''mv target/*.war target/$APP_NAME.war
+echo From tomcat:8-jre8 > Dockerfile
+echo COPY target /usr/local/tomcat/webapps/ >> Dockerfile
+docker build -t $APP_NAME .'''
+            sh 'docker run -d -p 8081:8080 --name $APP_NAME --network jenkins_js-network $APP_NAME'
           }
         }
         stage('App2') {
