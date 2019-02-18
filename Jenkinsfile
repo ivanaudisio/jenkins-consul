@@ -46,7 +46,7 @@ pipeline {
 echo From tomcat:8-jre8 > Dockerfile
 echo COPY target /usr/local/tomcat/webapps/ >> Dockerfile
 docker build -t app1 .
-sh \'docker run -d -p 8081:8080 --name app1 --network jenkins_js-network app1\'
+docker run -d -p 8081:8080 --name app1 --network jenkins_js-network app1
 '''
           }
         }
@@ -57,15 +57,36 @@ sh \'docker run -d -p 8081:8080 --name app1 --network jenkins_js-network app1\'
 echo From tomcat:8-jre8 > Dockerfile
 echo COPY target /usr/local/tomcat/webapps/ >> Dockerfile
 docker build -t app2 .
-sh \'docker run -d -p 8082:8080 --name app2--network jenkins_js-network app2\'
+docker run -d -p 8082:8080 --name app2 --network jenkins_js-network app2
 '''
           }
         }
       }
     }
-    stage('Destroy') {
-      steps {
-        sh 'echo hello'
+    stage('Test Apps') {
+      parallel {
+        stage('App1') {
+          steps {
+            sh '''sleep 10
+response=$(curl -s -o /dev/null -w "%{http_code}\\\\\\\\n" app1:8080)
+if ["$response" != "200"]
+then
+exit 1
+fi 
+'''
+          }
+        }
+        stage('App2') {
+          steps {
+            sh '''sleep 10
+response=$(curl -s -o /dev/null -w "%{http_code}\\\\\\\\n" app2:8080)
+if ["$response" != "200"]
+then
+exit 1
+fi 
+'''
+          }
+        }
       }
     }
   }
