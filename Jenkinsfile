@@ -45,7 +45,7 @@ pipeline {
             sh '''mv target/*.war target/app1.war
 echo From tomcat:8-jre8 > Dockerfile
 echo COPY target /usr/local/tomcat/webapps/ >> Dockerfile
-docker build -t app1.
+docker build -t app1 .
 sh \'docker run -d -p 8081:8080 --name app1 --network jenkins_js-network app1\'
 '''
           }
@@ -56,7 +56,7 @@ sh \'docker run -d -p 8081:8080 --name app1 --network jenkins_js-network app1\'
             sh '''mv target/*.war target/app2.war
 echo From tomcat:8-jre8 > Dockerfile
 echo COPY target /usr/local/tomcat/webapps/ >> Dockerfile
-docker build -t app2.
+docker build -t app2 .
 sh \'docker run -d -p 8082:8080 --name app2--network jenkins_js-network app2\'
 '''
           }
