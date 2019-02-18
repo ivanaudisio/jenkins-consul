@@ -67,6 +67,7 @@ docker run -d -p 8082:8080 --name app2 --network jenkins_js-network app2
       parallel {
         stage('App1') {
           steps {
+            echo 'App URL: http://localhost:8081/app1'
             sh '''sleep 10
 response=$(curl -s -o /dev/null -w "%{http_code}\\\\\\\\n" app1:8080)
 if ["$response" != "200"]
@@ -78,6 +79,7 @@ fi
         }
         stage('App2') {
           steps {
+            echo 'App URL: http://localhost:8082/app2'
             sh '''sleep 10
 response=$(curl -s -o /dev/null -w "%{http_code}\\\\\\\\n" app2:8080)
 if ["$response" != "200"]
