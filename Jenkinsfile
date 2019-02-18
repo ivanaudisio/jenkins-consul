@@ -6,7 +6,7 @@ pipeline {
         stage('App1') {
           agent {
             docker {
-              image 'image \'maven:3-jdk-7-slim'
+              image 'maven:3-jdk-7-slim'
             }
 
           }
